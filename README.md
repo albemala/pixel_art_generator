@@ -4,9 +4,9 @@
 
 A Flutter package to generate pixel art sprites from an optional template.
 
-|                   Humanoids                   |                   Robots                   |                   Spaceships                   |
-|:---------------------------------------------:|:------------------------------------------:|:----------------------------------------------:|
-| <img src="example/screenshots/humanoids.png"> | <img src="example/screenshots/robots.png"> | <img src="example/screenshots/spaceships.png"> |
+|                                                     Humanoids                                                     |                                                     Robots                                                     |                                                     Spaceships                                                     |
+|:-----------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://raw.githubusercontent.com/albemala/pixel_art_generator/main/example/screenshots/humanoids.png"> | <img src="https://raw.githubusercontent.com/albemala/pixel_art_generator/main/example/screenshots/robots.png"> | <img src="https://raw.githubusercontent.com/albemala/pixel_art_generator/main/example/screenshots/spaceships.png"> |
 
 ## Examples
 
