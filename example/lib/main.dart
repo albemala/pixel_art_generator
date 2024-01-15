@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pixel_art_generator/pixel_art_generator.dart';
 
 void main() {
@@ -39,35 +40,91 @@ class PixelArtGeneratorView extends StatefulWidget {
 }
 
 class _PixelArtGeneratorViewState extends State<PixelArtGeneratorView> {
+  static const randomTemplateName = 'Random';
+
+  bool isRandomTemplateName(String name) {
+    return name == randomTemplateName;
+  }
+
   final dataColorConverter = CustomPixelDataColorConverter();
 
   int tilesCount = 3;
+
+  final availableTemplates = <PixelDataTemplate>[];
+
+  final allTemplates = <String>[
+    randomTemplateName,
+  ];
+  String selectedTemplateName = randomTemplateName;
 
   int dataSize = 4;
   bool mirrorX = false;
   bool mirrorY = false;
   bool outline = false;
 
-  var template = emptyPixelDataTemplate;
-  var data = <PixelData>[];
+  var pixelData = <PixelData>[];
+
+  PixelDataTemplate get selectedTemplate {
+    return availableTemplates.firstWhere((element) {
+      return element.name == selectedTemplateName;
+    });
+  }
+
+  int get selectedTemplateDataSize {
+    return isRandomTemplateName(selectedTemplateName)
+        ? dataSize
+        : selectedTemplate.width;
+  }
+
+  bool get selectedTemplateMirrorX {
+    return isRandomTemplateName(selectedTemplateName)
+        ? mirrorX
+        : selectedTemplate.options.mirrorX;
+  }
+
+  bool get selectedTemplateMirrorY {
+    return isRandomTemplateName(selectedTemplateName)
+        ? mirrorY
+        : selectedTemplate.options.mirrorY;
+  }
+
+  bool get selectedTemplateOutline {
+    return isRandomTemplateName(selectedTemplateName)
+        ? outline
+        : selectedTemplate.options.outline;
+  }
 
   @override
   void initState() {
     super.initState();
     updateData();
+    _init();
+  }
+
+  Future<void> _init() async {
+    // load templates from assets/templates.json
+    final jsonString = await rootBundle.loadString('assets/templates.json');
+    availableTemplates.addAll(loadPixelTemplatesFromJson(jsonString));
+    setState(() {
+      allTemplates.addAll(availableTemplates.map((e) => e.name));
+    });
   }
 
   void updateData() {
     setState(() {
-      // regenerate template data
-      template = generateRandomPixelDataTemplate(
-        dataSize,
-        dataSize,
-        mirrorX: mirrorX,
-        mirrorY: mirrorY,
-        outline: outline,
+      final template = isRandomTemplateName(selectedTemplateName)
+          ? generateRandomPixelDataTemplate(
+              dataSize,
+              dataSize,
+              mirrorX: mirrorX,
+              mirrorY: mirrorY,
+              outline: outline,
+            )
+          : selectedTemplate;
+      pixelData = generateRandomPixelData(
+        tilesCount * tilesCount,
+        template,
       );
-      data = generateRandomPixelData(tilesCount * tilesCount, template);
     });
   }
 
@@ -95,28 +152,49 @@ class _PixelArtGeneratorViewState extends State<PixelArtGeneratorView> {
                 ),
               ),
               const SizedBox(height: 16),
-              Text('Data size $dataSize'),
+              const Text('Template'),
               SizedBox(
                 width: 240,
-                child: Slider(
-                  value: dataSize.toDouble(),
-                  min: 4,
-                  max: 16,
-                  divisions: 12,
+                child: DropdownButton<String>(
+                  value: selectedTemplateName,
                   onChanged: (value) {
-                    dataSize = value.toInt();
+                    selectedTemplateName = value ?? randomTemplateName;
                     updateData();
                   },
+                  items: allTemplates.map((e) {
+                    return DropdownMenuItem<String>(
+                      value: e,
+                      child: Text(e),
+                    );
+                  }).toList(),
                 ),
               ),
+              const SizedBox(height: 16),
+              Text('Data size $selectedTemplateDataSize'),
+              if (isRandomTemplateName(selectedTemplateName))
+                SizedBox(
+                  width: 240,
+                  child: Slider(
+                    value: dataSize.toDouble(),
+                    min: 4,
+                    max: 16,
+                    divisions: 12,
+                    onChanged: (value) {
+                      dataSize = value.toInt();
+                      updateData();
+                    },
+                  ),
+                ),
               const SizedBox(height: 16),
               Row(
                 children: [
                   Checkbox(
-                    value: mirrorX,
+                    value: selectedTemplateMirrorX,
                     onChanged: (value) {
-                      mirrorX = value ?? false;
-                      updateData();
+                      if (isRandomTemplateName(selectedTemplateName)) {
+                        mirrorX = value ?? false;
+                        updateData();
+                      }
                     },
                   ),
                   const Text('Mirror X'),
@@ -126,10 +204,12 @@ class _PixelArtGeneratorViewState extends State<PixelArtGeneratorView> {
               Row(
                 children: [
                   Checkbox(
-                    value: mirrorY,
+                    value: selectedTemplateMirrorY,
                     onChanged: (value) {
-                      mirrorY = value ?? false;
-                      updateData();
+                      if (isRandomTemplateName(selectedTemplateName)) {
+                        mirrorY = value ?? false;
+                        updateData();
+                      }
                     },
                   ),
                   const Text('Mirror Y'),
@@ -139,10 +219,12 @@ class _PixelArtGeneratorViewState extends State<PixelArtGeneratorView> {
               Row(
                 children: [
                   Checkbox(
-                    value: outline,
+                    value: selectedTemplateOutline,
                     onChanged: (value) {
-                      outline = value ?? false;
-                      updateData();
+                      if (isRandomTemplateName(selectedTemplateName)) {
+                        outline = value ?? false;
+                        updateData();
+                      }
                     },
                   ),
                   const Text('Outline'),
@@ -160,7 +242,7 @@ class _PixelArtGeneratorViewState extends State<PixelArtGeneratorView> {
         ),
         Expanded(
           child: GridView.builder(
-            itemCount: data.length,
+            itemCount: pixelData.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: tilesCount,
             ),
@@ -168,7 +250,7 @@ class _PixelArtGeneratorViewState extends State<PixelArtGeneratorView> {
               return Padding(
                 padding: const EdgeInsets.all(12),
                 child: PixelDataViewer(
-                  pixels: data[index],
+                  pixelData: pixelData[index],
                   colorConverter: dataColorConverter,
                 ),
               );
@@ -189,11 +271,11 @@ class CustomPixelDataColorConverter extends PixelDataColorConverter {
       case backgroundData:
         return Colors.grey[100]!;
       case foregroundData:
-        return Colors.grey[500]!;
+        return Colors.grey[400]!;
       case accentData:
-        return Colors.grey[700]!;
+        return Colors.grey[600]!;
       case outlineData:
-        return Colors.grey[900]!;
+        return Colors.grey[800]!;
     }
     return Colors.red;
   }

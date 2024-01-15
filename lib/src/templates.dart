@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
@@ -45,29 +44,24 @@ const emptyPixelDataTemplate = PixelDataTemplate(
   ),
 );
 
-// TODO rewrite
-Future<List<PixelDataTemplate>> loadPixelTemplatesFromJson(
-    String filePath) async {
-  final file = File(filePath);
-  final content = await file.readAsString();
-  final json = jsonDecode(content) as Map<String, dynamic>;
+List<PixelDataTemplate> loadPixelTemplatesFromJson(String jsonString) {
+  final templatesJson = jsonDecode(jsonString) as List<dynamic>;
 
-  return json.entries.map((entry) {
-    final name = entry.key;
-    final templateJson = entry.value as Map<String, dynamic>;
-    final optionsJson = templateJson['options'] as Map<String, dynamic>;
+  return templatesJson.map((templateJson) {
+    final templateMap = templateJson as Map<String, dynamic>;
 
+    final optionsMap = templateMap['options'] as Map<String, dynamic>;
     final options = PixelDataTemplateOptions(
-      mirrorX: optionsJson['mirrorX'] as bool,
-      mirrorY: optionsJson['mirrorY'] as bool,
-      outline: optionsJson['outline'] as bool,
+      mirrorX: optionsMap['mirrorX'] as bool,
+      mirrorY: optionsMap['mirrorY'] as bool,
+      outline: optionsMap['outline'] as bool,
     );
 
     final template = PixelDataTemplate(
-      name: name,
-      width: templateJson['width'] as int,
-      height: templateJson['height'] as int,
-      data: List<int>.from(templateJson['data'] as List<dynamic>),
+      name: templateMap['name'] as String,
+      width: templateMap['width'] as int,
+      height: templateMap['height'] as int,
+      data: List<int>.from(templateMap['data'] as List<dynamic>),
       options: options,
     );
 

@@ -6,11 +6,11 @@ abstract class PixelDataColorConverter {
 }
 
 class PixelDataViewer extends StatelessWidget {
-  final PixelData pixels;
+  final PixelData pixelData;
   final PixelDataColorConverter colorConverter;
 
   const PixelDataViewer({
-    required this.pixels,
+    required this.pixelData,
     required this.colorConverter,
     super.key,
   });
@@ -19,7 +19,7 @@ class PixelDataViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _PixelDataPainter(
-        pixels,
+        pixelData,
         colorConverter,
       ),
     );
