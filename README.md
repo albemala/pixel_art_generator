@@ -41,10 +41,14 @@ final pixelData = generateRandomPixelData(9, humanoidTemplate);
 
 ## Support this project
 
-<a href="https://www.buymeacoffee.com/albemala" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+[Buy Me A Coffee](https://www.buymeacoffee.com/albemala)
+
+## Other projects
+
+[All my projects](https://projects.albemala.me/)
 
 ## Credits
 
-Inspired by [Pixel Sprite Generator](https://github.com/ArtBIT/pixel-sprite-generator)
+Created by [@albemala](https://github.com/albemala).
 
-Created by [@albemala](https://github.com/albemala) ([Twitter](https://twitter.com/albemala)).
+Inspired by [Pixel Sprite Generator](https://github.com/ArtBIT/pixel-sprite-generator)
