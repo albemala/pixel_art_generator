@@ -41,7 +41,8 @@ final pixelData = generateRandomPixelData(9, humanoidTemplate);
 
 ## Support this project
 
-[Buy Me A Coffee](https://www.buymeacoffee.com/albemala)
+- [GitHub Sponsor](https://github.com/sponsors/albemala)
+- [Buy Me A Coffee](https://www.buymeacoffee.com/albemala)
 
 ## Other projects
 
@@ -49,6 +50,6 @@ final pixelData = generateRandomPixelData(9, humanoidTemplate);
 
 ## Credits
 
-Created by [@albemala](https://github.com/albemala).
+Created by [@albemala](https://github.com/albemala) ([Twitter](https://twitter.com/albemala))
 
 Inspired by [Pixel Sprite Generator](https://github.com/ArtBIT/pixel-sprite-generator)

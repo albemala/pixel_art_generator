@@ -3,6 +3,10 @@ description: A Flutter package to generate pixel art sprites from an optional te
 version: 1.0.2
 repository: https://github.com/albemala/pixel_art_generator
 
+funding:
+  - https://github.com/sponsors/albemala
+  - https://www.buymeacoffee.com/albemala
+
 environment:
   sdk: ">=3.2.0 <4.0.0"
   flutter: ">=3.16.0"
