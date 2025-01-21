@@ -1,6 +1,6 @@
 name: pixel_art_generator
 description: A Flutter package to generate pixel art sprites from an optional template.
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/albemala/pixel_art_generator
 
 funding:
