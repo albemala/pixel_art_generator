@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Updated project links in README (portfolio v5 migration)
+
 ## 1.0.3
 
 - Updated funding information
