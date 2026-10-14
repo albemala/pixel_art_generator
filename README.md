@@ -46,7 +46,7 @@ final pixelData = generateRandomPixelData(9, humanoidTemplate);
 
 ## Other projects
 
-[All my projects](https://projects.albemala.me/)
+[All my projects](https://albemala.me/apps/)
 
 ## Credits
 
